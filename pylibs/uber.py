@@ -15,7 +15,7 @@ def uber_get_ride(entities, client):
     print result.json()
     if client == 'web':
         return result.text
-    elif client == 'voice':
+    elif client in ['voice', 'text']:
         print json.loads(result.text)
         return ', '.join(map(format_voice,
                 json.loads(result.text).get('times')))
