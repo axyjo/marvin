@@ -55,3 +55,9 @@ target/
 
 # Mongo Data
 mongoData/
+
+#Vim
+*.swp
+
+# OS X
+.DS_Store
