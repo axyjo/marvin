@@ -48,8 +48,8 @@ def uber_eta():
 @app.route('/callback/wit', methods=['POST'])
 def route_request():
     data = request.json
-    intent = data.get('outcome').get('intent')
-    entities = data.get('outcome').get('entities')
+    intent = data.get('outcomes').get('intent')
+    entities = data.get('outcomes').get('entities')
     print data
     print intent
     if intent in callbacks:
@@ -72,6 +72,9 @@ def on_call():
 
 @app.route('/callback/twilio/onRecord')
 def on_record():
+    if request.values.get('Digits', None) == 'timeout':
+        return ''
+
     if request.values.get('Digits', None) == 'hangup':
         return ''
 
@@ -95,8 +98,8 @@ def on_record():
     wit_dict = json.loads(wit_response.text)
     print wit_dict
 
-    intent = wit_dict.get('outcome').get('intent')
-    entities = wit_dict.get('outcome').get('entities')
+    intent = wit_dict.get('outcomes')[0].get('intent')
+    entities = wit_dict.get('outcomes')[0].get('entities')
 
     resp.say("Roger that.")
 
@@ -120,11 +123,16 @@ def on_text():
                 'Authorization': 'Bearer 5QX3F2PX2RTQI2DVWRLYV7VXVARO767B'
             }
     )
-    print wit_response.text
+
+    wit_dict = json.loads(wit_response.text)
+    print wit_dict
+
+    intent = wit_dict.get('outcomes')[0].get('intent')
+    entities = wit_dict.get('outcomes')[0].get('entities')
 
     resp = twilio.twiml.Response()
-    resp.message(request.values.get('Body', None))
-
+    if intent in callbacks:
+        resp.message(callbacks[intent](entities, 'text'))
 
     return str(resp)
 
