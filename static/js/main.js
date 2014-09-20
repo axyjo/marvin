@@ -35,15 +35,18 @@ $(function (){
           self.badConfidence();
           return;
         }
+        $.ajax({
+          url: "/callback/wit",
+          type: "POST",
+          data: JSON.stringify(response),
+          dataType: "json",
+          contentType: "application/json",
+          success: function(result) {
+            console.log(result);
+            self.$el.find('.error').text(result.response);
+          }
+        });
         self.determineIntent(intent, entities);
-
-        //self.$el.find("#result").html(intent + "<br />");
-        //self.$el.find("#msgBody").html('You said "' + response.msg_body + '"');
-
-
-        // if (self.callbackServices[intent]) {
-        //   self.callbackServices[intent].run(entities, self.$el);
-        // }
       };
       this.mic.connect(this.witAiClientKey);
     },
@@ -51,7 +54,7 @@ $(function (){
       this.$el.find(".error").text("Sorry, we couldn't make out what you said. Can you try again?");
     },
     showPewPew: function (){
-      this.$el.find('#result').append('Pew Pew.');
+      this.$el.find('.error').append('Pew Pew.');
     },
     getUberRide: function (entities){
       var self = this;

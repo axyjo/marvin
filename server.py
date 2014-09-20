@@ -6,6 +6,7 @@ import requests
 import json
 import mongoengine as me
 import twilio.twiml
+from uber import uber_get_ride
 
 app = Flask(__name__, static_folder='static', static_url_path='')
 
@@ -23,6 +24,11 @@ negative = [
     "Could you repeat that?"
 ]
 
+callbacks = {
+    'uber_get_ride': uber_get_ride,
+    'shots_fired': lambda x, y : 'Pew pew'
+}
+
 @app.route("/")
 def landing_page():
     print 'On landing page'
@@ -39,6 +45,18 @@ def uber_eta():
     print result.text
     return jsonify(result.json())
 
+@app.route('/callback/wit', methods=['POST'])
+def route_request():
+    data = request.json
+    intent = data.get('outcomes').get('intent')
+    entities = data.get('outcomes').get('entities')
+    print data
+    print intent
+    if intent in callbacks:
+        print 'Intent known'
+        return jsonify(response=callbacks[intent](entities, 'voice'))
+    return ''
+
 @app.route('/callback/twilio/onCall')
 def on_call():
     resp = twilio.twiml.Response()
@@ -46,7 +64,6 @@ def on_call():
     resp.record(
             action='/callback/twilio/onRecord',
             method='GET',
-            playBeep=False,
             maxLength=10,
             timeout=1
     )
@@ -55,6 +72,9 @@ def on_call():
 
 @app.route('/callback/twilio/onRecord')
 def on_record():
+    if request.values.get('Digits', None) == 'timeout':
+        return ''
+
     if request.values.get('Digits', None) == 'hangup':
         return ''
 
@@ -74,16 +94,46 @@ def on_record():
                 'Content-Type': 'audio/wav'
             }
     )
-    print wit_response.text
+
+    wit_dict = json.loads(wit_response.text)
+    print wit_dict
+
+    intent = wit_dict.get('outcomes')[0].get('intent')
+    entities = wit_dict.get('outcomes')[0].get('entities')
 
     resp.say("Roger that.")
+
+    if intent in callbacks:
+        resp.say(callbacks[intent](entities, 'voice'))
+
     resp.record(
             action='/callback/twilio/onRecord',
             method='GET',
-            playBeep=False,
             maxLength=10,
             timeout=1
     )
+    return str(resp)
+
+
+@app.route('/callback/twilio/onText')
+def on_text():
+    wit_response = requests.get(
+            url='https://api.wit.ai/message?v=20140920&q=' + request.values.get('Body', None),
+            headers={
+                'Authorization': 'Bearer 5QX3F2PX2RTQI2DVWRLYV7VXVARO767B'
+            }
+    )
+
+    wit_dict = json.loads(wit_response.text)
+    print wit_dict
+
+    intent = wit_dict.get('outcomes')[0].get('intent')
+    entities = wit_dict.get('outcomes')[0].get('entities')
+
+    resp = twilio.twiml.Response()
+    if intent in callbacks:
+        resp.message(callbacks[intent](entities, 'text'))
+
     return str(resp)
 
 
