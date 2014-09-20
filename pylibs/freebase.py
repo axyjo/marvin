@@ -16,4 +16,5 @@ def person_search(entities, client):
     if client == 'web':
         return info_dict
     elif client in ['text', 'voice']:
-        return value
+        values = value.split('. ')
+        return '. '.join(values[:2]).strip() + '.'
