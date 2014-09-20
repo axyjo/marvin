@@ -7,6 +7,7 @@ import json
 import mongoengine as me
 import twilio.twiml
 from uber import uber_get_ride
+from freebase import person_search
 
 app = Flask(__name__, static_folder='static', static_url_path='')
 
@@ -26,7 +27,8 @@ negative = [
 
 callbacks = {
     'uber_get_ride': uber_get_ride,
-    'shots_fired': lambda x, y : 'Pew pew'
+    'shots_fired': lambda x, y : 'Pew pew',
+    'person_search': person_search
 }
 
 @app.route("/")
@@ -48,8 +50,9 @@ def uber_eta():
 @app.route('/callback/wit', methods=['POST'])
 def route_request():
     data = request.json
-    intent = data.get('outcomes').get('intent')
-    entities = data.get('outcomes').get('entities')
+    print data
+    intent = data.get('outcome').get('intent')
+    entities = data.get('outcome').get('entities')
     print data
     print intent
     if intent in callbacks:
