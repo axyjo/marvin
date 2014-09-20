@@ -9,6 +9,7 @@ import mongoengine as me
 import twilio.twiml
 from uber import uber_get_ride
 from freebase import person_search
+from zen import zen
 
 app = Flask(__name__, static_folder='static', static_url_path='')
 
@@ -29,7 +30,8 @@ negative = [
 callbacks = {
     'uber_get_ride': uber_get_ride,
     'shots_fired': lambda x, y : 'Pew pew',
-    'person_search': person_search
+    'person_search': person_search,
+    'zen': zen
 }
 
 @app.route("/")

@@ -5,6 +5,9 @@ import urllib
 def person_search(entities, client):
     name_search_url = 'https://www.googleapis.com/freebase/v1/search?query='
     entity_dict = entities.get('entity')
+    if (not isinstance(entity_dict, dict)):
+        entity_dict = entity_dict[0]
+
     name_search = requests.get(name_search_url + entity_dict.get('value'))
     name = name_search.json().get('result')[0].get('id')
     info = requests.get('https://www.googleapis.com/freebase/v1/topic' +
