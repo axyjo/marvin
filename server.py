@@ -6,6 +6,7 @@ import requests
 import json
 import mongoengine as me
 import twilio.twiml
+from uber import uber_get_ride
 
 app = Flask(__name__, static_folder='static', static_url_path='')
 
@@ -23,6 +24,11 @@ negative = [
     "Could you repeat that?"
 ]
 
+callbacks = {
+    'uber_get_ride': uber_get_ride,
+    'shots_fired': lambda x, y : 'Shots have been fired'
+}
+
 @app.route("/")
 def landing_page():
     print 'On landing page'
@@ -38,6 +44,18 @@ def uber_eta():
             )
     print result.text
     return jsonify(result.json())
+
+@app.route('/callback/wit', methods=['POST'])
+def route_request():
+    data = request.json
+    intent = data.get('outcome').get('intent')
+    entities = data.get('outcome').get('entities')
+    print data
+    print intent
+    if intent in callbacks:
+        print 'Intent known'
+        return jsonify(response=callbacks[intent](entities, 'web'))
+    return ''
 
 @app.route('/callback/twilio/onCall')
 def on_call():

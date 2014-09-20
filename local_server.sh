@@ -20,7 +20,7 @@ mongod --dbpath mongoData &
 sleep 1
 
 echo "Starting flask server"
-python server.py
+PYTHONPATH=pylibs python server.py
 
 # Only exit on terminate or interrupt signal
 while true; do

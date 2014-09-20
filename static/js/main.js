@@ -31,13 +31,21 @@ $(function (){
         if (response.outcome.confidence < 0.5) {
           return;
         }
+        console.log(response);
+        //self.$el.find("#result").html(intent + "<br />");
+        //self.$el.find("#msgBody").html('You said "' + response.msg_body + '"');
 
-        self.$el.find("#result").html(intent + "<br />");
-        self.$el.find("#msgBody").html('You said "' + response.msg_body + '"');
-
-        if (self.callbackServices[intent]) {
-          self.callbackServices[intent].run(entities, self.$el);
-        }
+        $.ajax({
+          url: "/callback/wit",
+          type: "POST",
+          data: JSON.stringify(response),
+          dataType: "json",
+          contentType: "application/json",
+          success: function(result) {
+            console.log(result);
+            self.$el.find('#result').text(result.response);
+          }
+        });
       };
       this.mic.connect(this.witAiClientKey);
     },
