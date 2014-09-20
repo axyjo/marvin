@@ -5,6 +5,8 @@
 <body style="text-align: center;">
   <center><div id="microphone"></div></center>
   <pre id="result"></pre>
+  <pre id="msgBody"></pre>
+
   <div id="info"></div>
   <script src="microphone/microphone.js"></script>
 
@@ -19,13 +21,15 @@
     mic.onaudiostart = function () {
       info("Recording started");
     };
-    mic.onaudioend = function () {
+    mic.onaudioend = function (hey) {
+      console.log(hey)
       info("Recording stopped, processing started");
     };
     mic.onerror = function (err) {
       info("Error: " + err);
     };
-    mic.onresult = function (intent, entities) {
+    mic.onresult = function (intent, entities, response) {
+      console.log(response);
       var r = kv("intent", intent);
 
       for (var k in entities) {
@@ -41,6 +45,7 @@
       }
 
       document.getElementById("result").innerHTML = r;
+      document.getElementById("msgBody").innerHTML = 'You said ' + response.msg_body;
     };
     mic.connect("SEQIOU2HL5YXX3DIPEPTAAPRDU6NM6V5");
     // mic.start();
