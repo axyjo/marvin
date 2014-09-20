@@ -54,7 +54,7 @@ def route_request():
     print intent
     if intent in callbacks:
         print 'Intent known'
-        return jsonify(response=callbacks[intent](entities, 'web'))
+        return jsonify(response=callbacks[intent](entities, 'voice'))
     return ''
 
 @app.route('/callback/twilio/onCall')
@@ -92,7 +92,9 @@ def on_record():
                 'Content-Type': 'audio/wav'
             }
     )
-    print wit_response.text
+
+    wit_dict = json.loads(wit_response.text)
+    print wit_dict
 
     resp.say("Roger that.")
     resp.record(
