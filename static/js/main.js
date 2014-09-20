@@ -62,13 +62,13 @@ $(function (){
     }
   });
 
-  // var AppView = Backbone.View.extend({
-  //   el: $('.container')
+  var AppView = Backbone.View.extend({
+    el: $('.container')
 
-  // });
+  });
 
-  var app = new MicView();
-  app.render();
-  Backbone.history.start();
+  var micView = new MicView();
+  var appView = new AppView();
 
+  micView.render();
 });
