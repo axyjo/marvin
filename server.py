@@ -64,7 +64,6 @@ def on_call():
     resp.record(
             action='/callback/twilio/onRecord',
             method='GET',
-            playBeep=False,
             maxLength=10,
             timeout=1
     )
@@ -107,10 +106,26 @@ def on_record():
     resp.record(
             action='/callback/twilio/onRecord',
             method='GET',
-            playBeep=False,
             maxLength=10,
             timeout=1
     )
+    return str(resp)
+
+
+@app.route('/callback/twilio/onText')
+def on_text():
+    wit_response = requests.get(
+            url='https://api.wit.ai/message?v=20140920&q=' + request.values.get('Body', None),
+            headers={
+                'Authorization': 'Bearer 5QX3F2PX2RTQI2DVWRLYV7VXVARO767B'
+            }
+    )
+    print wit_response.text
+
+    resp = twilio.twiml.Response()
+    resp.message(request.values.get('Body', None))
+
+
     return str(resp)
 
 
