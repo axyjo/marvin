@@ -1,0 +1,15 @@
+ul .badge{
+  background-color: #469DD8;
+}
+
+.body ul li{
+  text-align: left;
+  padding-left: 30px;
+}
+
+.body{
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
