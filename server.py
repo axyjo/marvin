@@ -2,11 +2,13 @@ from flask import Flask
 from flask import request
 from flask import jsonify
 from flask import render_template
+import random
 import requests
 import json
 import mongoengine as me
 import twilio.twiml
 from uber import uber_get_ride
+from freebase import person_search
 
 app = Flask(__name__, static_folder='static', static_url_path='')
 
@@ -26,7 +28,8 @@ negative = [
 
 callbacks = {
     'uber_get_ride': uber_get_ride,
-    'shots_fired': lambda x, y : 'Pew pew'
+    'shots_fired': lambda x, y : 'Pew pew',
+    'person_search': person_search
 }
 
 @app.route("/")
@@ -48,8 +51,9 @@ def uber_eta():
 @app.route('/callback/wit', methods=['POST'])
 def route_request():
     data = request.json
-    intent = data.get('outcomes').get('intent')
-    entities = data.get('outcomes').get('entities')
+    print data
+    intent = data.get('outcome').get('intent')
+    entities = data.get('outcome').get('entities')
     print data
     print intent
     if intent in callbacks:
@@ -101,7 +105,8 @@ def on_record():
     intent = wit_dict.get('outcomes')[0].get('intent')
     entities = wit_dict.get('outcomes')[0].get('entities')
 
-    resp.say("Roger that.")
+    resp.say(random.choice(affirmative))
+    resp.pause()
 
     if intent in callbacks:
         resp.say(callbacks[intent](entities, 'voice'))
@@ -133,6 +138,8 @@ def on_text():
     resp = twilio.twiml.Response()
     if intent in callbacks:
         resp.message(callbacks[intent](entities, 'text'))
+    else:
+        resp.message(random.choice(negative))
 
     return str(resp)
 
