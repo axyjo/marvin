@@ -1,71 +1,57 @@
 $(function (){
-  
-  function kv (k, v) {
-    if (toString.call(v) !== "[object String]") {
-      v = JSON.stringify(v);
-    }
-    return k + "=" + v + "\n";
-  }
 
   var MicView = Backbone.View.extend({
+    witAiClientKey: 'SEQIOU2HL5YXX3DIPEPTAAPRDU6NM6V5',
     el: $('.container'),
     template: _.template($("#mic-template").html()),
+    callbackServices: Robot,
+
     initialize: function (){
-           
+
     },
+
     createMic: function (){
-      var that = this;
+      var self = this;
       this.mic = new Wit.Microphone(document.getElementById("microphone"));
-      
+
       this.mic.onready = function () {
-        that.getInfoDiv("Microphone is ready to record");
+        self.getInfoDiv("Microphone is ready to record");
       };
       this.mic.onaudiostart = function () {
-        that.getInfoDiv("Recording started");
+        self.getInfoDiv("Recording started");
       };
-      this.mic.onaudioend = function (hey) {
-        console.log(hey)
-        that.getInfoDiv("Recording stopped, processing started");
+      this.mic.onaudioend = function () {
+        self.getInfoDiv("Recording stopped, processing started");
       };
       this.mic.onerror = function (err) {
-        that.getInfoDiv("Error: " + err);
+        self.getInfoDiv("Error: " + err);
       };
       this.mic.onresult = function (intent, entities, response) {
-        var r = kv("intent", intent);
-
-        for (var k in entities) {
-          var e = entities[k];
-
-          if (!(e instanceof Array)) {
-            r += kv(k, e.value);
-          } else {
-            for (var i = 0; i < e.length; i++) {
-              r += kv(k, e[i].value);
-            }
-          }
+        // If we're very unsure of the message, ignore it.
+        if (response.outcome.confidence < 0.5) {
+          return;
         }
 
-        document.getElementById("result").innerHTML = r;
-        document.getElementById("msgBody").innerHTML = 'You said "' + response.msg_body + '"';
+        if (self.callbackServices[intent]) {
+          self.callbackServices[intent].run(entities, self.$el);
+        }
+
+        self.$el.find("#result").html(intent + "<br />");
+        self.$el.find("#msgBody").html('You said "' + response.msg_body + '"');
       };
-      this.mic.connect("SEQIOU2HL5YXX3DIPEPTAAPRDU6NM6V5");
-      // mic.start();
-      // mic.stop();
+      this.mic.connect(this.witAiClientKey);
     },
+
     getInfoDiv: function (msg) {
       document.getElementById("info").innerHTML = msg;
     },
+
     render: function (){
       this.$el.html(this.template()).trigger('create');
       this.createMic();
       return this;
     }
   });
-
-  // var AppView = Backbone.View.extend({
-  //   el: $('.container')
-
-  // });
 
   var app = new MicView();
   app.render();
