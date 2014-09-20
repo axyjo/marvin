@@ -26,7 +26,7 @@ negative = [
 
 callbacks = {
     'uber_get_ride': uber_get_ride,
-    'shots_fired': lambda x, y : 'Shots have been fired'
+    'shots_fired': lambda x, y : 'Pew pew'
 }
 
 @app.route("/")
@@ -96,7 +96,14 @@ def on_record():
     wit_dict = json.loads(wit_response.text)
     print wit_dict
 
+    intent = wit_dict.get('outcome').get('intent')
+    entities = wit_dict.get('outcome').get('entities')
+
     resp.say("Roger that.")
+
+    if intent in callbacks:
+        resp.say(callbacks[intent](entities, 'voice'))
+
     resp.record(
             action='/callback/twilio/onRecord',
             method='GET',
