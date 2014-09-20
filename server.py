@@ -48,7 +48,7 @@ def on_call():
             method='GET',
             playBeep=False,
             maxLength=10,
-            timeout=2
+            timeout=1
     )
     return str(resp)
 
@@ -82,7 +82,7 @@ def on_record():
             method='GET',
             playBeep=False,
             maxLength=10,
-            timeout=2
+            timeout=1
     )
     return str(resp)
 
