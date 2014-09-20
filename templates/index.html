@@ -7,8 +7,16 @@
   <pre id="result"></pre>
   <div id="info"></div>
   <script src="microphone/microphone.js"></script>
+  <script src="js/libs/jquery-2.1.1.js"></script>
 
   <script>
+
+    // Top level functions
+    var showTime = function (position) {
+      console.log(position.coords.latitude);
+      console.log(position.coords.longitude);
+    };
+
     var mic = new Wit.Microphone(document.getElementById("microphone"));
     var info = function (msg) {
       document.getElementById("info").innerHTML = msg;
@@ -25,7 +33,10 @@
     mic.onerror = function (err) {
       info("Error: " + err);
     };
-    mic.onresult = function (intent, entities) {
+    mic.onresult = function (intent, entities, text) {
+      console.log(intent);
+      console.log(entities);
+      console.log(text);
       var r = kv("intent", intent);
 
       for (var k in entities) {
@@ -40,7 +51,15 @@
         }
       }
 
-      document.getElementById("result").innerHTML = r;
+      if (intent == 'uber_get_ride') {
+        var eta = $.ajax('http://localhost:5000/api/uber/eta').done(function() {
+          console.log(eta);
+          document.getElementById("result").innerHTML = 'Uber X in ' +
+            eta.responseJSON.times[0].estimate;
+        });
+      } else {
+        document.getElementById("result").innerHTML = r;
+      }
     };
     mic.connect("SEQIOU2HL5YXX3DIPEPTAAPRDU6NM6V5");
     // mic.start();
