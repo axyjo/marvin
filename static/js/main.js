@@ -32,12 +32,12 @@ $(function (){
           return;
         }
 
+        self.$el.find("#result").html(intent + "<br />");
+        self.$el.find("#msgBody").html('You said "' + response.msg_body + '"');
+
         if (self.callbackServices[intent]) {
           self.callbackServices[intent].run(entities, self.$el);
         }
-
-        self.$el.find("#result").html(intent + "<br />");
-        self.$el.find("#msgBody").html('You said "' + response.msg_body + '"');
       };
       this.mic.connect(this.witAiClientKey);
     },
