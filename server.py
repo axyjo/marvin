@@ -104,8 +104,19 @@ def on_record():
             }
     )
 
-    wit_dict = json.loads(wit_response.text)
-    print wit_dict
+    try:
+        wit_dict = json.loads(wit_response.text)
+        print wit_dict
+    except:
+        resp.say(random.choice(negative))
+        resp.record(
+            action='/callback/twilio/onRecord',
+            method='GET',
+            maxLength=10,
+            timeout=1
+        )
+        return str(resp)
+
 
     if len(wit_dict.get('outcomes')) == 0:
         resp.say(random.choice(negative))
