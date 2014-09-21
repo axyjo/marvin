@@ -1,3 +1,7 @@
+from gevent import monkey
+monkey.patch_all()
+import gevent.wsgi
+import werkzeug.serving
 from flask import Flask
 from flask import request
 from flask import jsonify
@@ -150,4 +154,7 @@ def on_text():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', debug=True)
+    app.debug = True
+
+    ws = gevent.wsgi.WSGIServer(('0.0.0.0', 5000), app)
+    ws.serve_forever()
