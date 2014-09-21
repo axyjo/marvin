@@ -1,7 +1,7 @@
 $(function (){
 
   var MicView = Backbone.View.extend({
-    witAiClientKey: 'SEQIOU2HL5YXX3DIPEPTAAPRDU6NM6V5',
+    witAiClientKey: 'ECS4EFJOA3ER7OUIFQKDTJGQHICMM75I',
     el: $('.container'),
     template: _.template($("#mic-template").html()),
     callbackServices: Robot,
