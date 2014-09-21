@@ -7,7 +7,7 @@ def wolfram_math(entities, client):
     print "entities"
     print entities
     expression = (entities.get('wolfram_search_query') or
-            entities.get('entity'))
+            entities.get('math_expression'))
     if (not isinstance(expression, dict)):
         expression = expression[0]
     expression = expression.get('value')
