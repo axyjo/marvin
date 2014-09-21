@@ -16,8 +16,9 @@ $(function (){
       };
       this.mic.onaudiostart = function () {
         self.getInfoDiv("Recording started");
-        self.$el.find('.error').hide();
+        self.$el.find('.error').slideUp();
         self.$el.find('.error').empty();
+        $('.container').slideDown();
       };
       this.mic.onaudioend = function () {
         self.getInfoDiv("Recording stopped, processing started");
@@ -31,6 +32,7 @@ $(function (){
           self.badConfidence();
           return;
         }
+        $('.container').slideUp();
         if(self.$el.children().length > 1){
           self.$el.slideUp();
           self.$el.children()[1].remove();
@@ -69,7 +71,7 @@ $(function (){
       }
     },
     badConfidence: function (){
-      this.$el.find('.error').show();
+      this.$el.find('.error').slideDown();
       this.$el.find('.error').text("Sorry, we couldn't make out what you said. Can you try again?");
     },
     showPewPew: function (){

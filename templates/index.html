@@ -7,14 +7,31 @@
 </head>
 <body style="text-align: center; margin: 40px 0;" >
 
-  <div class="body">
-    <div class="alert alert-danger error" role="alert"></div>
-    
+  <div class='well'>
+    <div class="body">
+      <div class="alert alert-danger error" role="alert"></div>
+
+    </div>
+
+    <center><div id="microphone"></div></center>
+    <div id="result"></div>
+    <div id="info"></div>
   </div>
 
-  <center><div id="microphone"></div></center>
-  <div id="result"></div>
-  <div id="info"></div>
+  <div class="container">
+    <div class="panel panel-primary">
+      <!-- Default panel contents -->
+      <div class="panel-heading">Sample queries:</div>
+
+      <!-- List group -->
+      <ul class="list-group">
+        <li class="list-group-item">"Who is the thirteenth president of the United States?"</li>
+        <li class="list-group-item">"When can I get a ride?"</li>
+        <li class="list-group-item">"Calculate the derivative of 3x squared."</li>
+        <li class="list-group-item">"Shots fired."</li>
+      </ul>
+    </div>
+  </div>
 
   <script id='uber-template' type='text/x-handlebars-template'>
     {% raw %}

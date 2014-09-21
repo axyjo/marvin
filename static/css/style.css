@@ -2,8 +2,6 @@ ul .badge {
   background-color: #469DD8; }
 
 .body {
-  padding-right: 15px;
-  padding-left: 15px;
   margin-right: auto;
   margin-left: auto; }
   .body ul li {
@@ -30,5 +28,14 @@ ul .badge {
 
 #microphone {
   margin-bottom: 20px; }
+
+.well {
+  width: 700px;
+  margin: 20px auto;
+  padding: 20px 0; }
+
+body .container {
+  width: 700px;
+  padding: 0; }
 
 /*# sourceMappingURL=style.css.map */
