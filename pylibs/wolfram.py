@@ -18,8 +18,9 @@ def wolfram_math(entities, client):
     soup = BeautifulSoup(answer.text)
     print soup
     try:
-        answer = soup.queryresult.find_all('pod', title='Result')[0].find(
-                'plaintext').getText()
+        el = (soup.queryresult.find_all('pod', id="Result")
+                or soup.queryresult.find_all('pod'))[0]
+        answer = el.find('plaintext').getText()
     except:
         try:
             answer = soup.queryresult.find_all('pod', title='Exact result')[0].find(
