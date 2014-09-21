@@ -13,6 +13,10 @@ def person_search(entities, client):
 
     name_search = requests.get(name_search_url + entity_dict.get('value'))
     name = name_search.json().get('result')[0].get('id')
+
+    if name is None:
+        return 'Sorry, I couldn\'t figure out who you were talking about.'
+
     info = requests.get('https://www.googleapis.com/freebase/v1/topic' +
             name + '?filter=/common/topic/article')
     info_dict = json.loads(info.text)
