@@ -12,6 +12,7 @@ $(function (){
     template: $("#mic-template").html(),
     uberTemplate: $('#uber-template').html(),
     shotsFiredTemplate: $('#shots-fired-template').html(),
+    searchTemplate: $('#search-template').html(),
     callbackServices: Robot,
     createMic: function (){
       var self = this;
@@ -22,7 +23,8 @@ $(function (){
       };
       this.mic.onaudiostart = function () {
         self.getInfoDiv("Recording started");
-        self.$el.find(".error").empty();
+        self.$el.find('.error').hide();
+        self.$el.find('.error').empty();
       };
       this.mic.onaudioend = function () {
         self.getInfoDiv("Recording stopped, processing started");
@@ -36,11 +38,15 @@ $(function (){
           self.badConfidence();
           return;
         }
+        if(self.$el.children().length > 1){
+          self.$el.slideUp();
+          self.$el.children()[1].remove();
+        }
         self.determineIntent(intent, entities, response);
       };
       this.mic.connect(this.witAiClientKey);
     },
-    determineIntent: function (intent, entities){
+    determineIntent: function (intent, entities, response){
       var self = this;
       if(intent === 'shots_fired'){
         this.showPewPew();
@@ -53,6 +59,7 @@ $(function (){
           contentType: "application/json",
           success: function(result) {
             console.log(result);
+            console.log('intent: ' + intent);
             if (intent === 'uber_get_ride'){
               self.getUberRide(entities, result);
             }
@@ -60,16 +67,17 @@ $(function (){
               self.remindUs(entities);
             }
             else if (intent === 'person_search'){
-              self.searchPerson(entities);
+              self.searchPerson(entities, result);
+            } else {
+              self.defaultIntent(result);
             }
-
-            self.$el.find('.error').text(result.response);
           }
         });
       }
     },
     badConfidence: function (){
-      this.$el.find(".error").text("Sorry, we couldn't make out what you said. Can you try again?");
+      this.$el.find('.error').show();
+      this.$el.find('.error').text("Sorry, we couldn't make out what you said. Can you try again?");
     },
     showPewPew: function (){
       var compiled = Handlebars.compile(this.shotsFiredTemplate);
@@ -77,23 +85,35 @@ $(function (){
       this.$el.append(compiled());
     },
     getUberRide: function (entities, response){
-      var times = response.times;
+      var times = response.response.split(', ');
       if (entities.uber_types && false) {
         times = _.filter(times, {});
       }
       var collection  = [];
       _.each(times, function (time) {
         var model = {};
-          model.ride = time.localized_display_name
-          model.time = self.formatMins(time.estimate);
-          collection.push(model);
-        });
-        self.renderUber(collection);
-      );
+        var splittedTime = time.split(' ');
+        model.ride = splittedTime[0];
+        model.time = splittedTime[splittedTime.length -2] + " " + splittedTime[splittedTime.length -1];
+        collection.push(model);
+      });
+      this.renderUber(collection);
     },
-    searchPerson:function (entities){
-      var self = this;
-      $.ajax('/')
+    searchPerson: function (entities, response){
+      var compiled = Handlebars.compile(this.searchTemplate);
+      this.$el.hide();
+      this.$el.css('width', '700px');
+      this.$el.append(compiled({text: response.response}));
+      
+      this.$el.slideDown();
+    },
+    defaultIntent: function (response){
+      var compiled = Handlebars.compile(this.searchTemplate);
+      this.$el.hide();
+      this.$el.css('width', '700px');
+      this.$el.append(compiled({text: response.response}));
+      
+      this.$el.slideDown();
     },
     getInfoDiv: function (msg) {
       document.getElementById("info").innerHTML = msg;
@@ -110,10 +130,8 @@ $(function (){
       this.$el.hide();
       this.$el.css('width', '400px');
       this.$el.append(compiled({collection: collection}));
+      
       this.$el.slideDown();
-    },
-    removeIntent: function (){
-
     }
   });
 
