@@ -1,11 +1,5 @@
 $(function (){
 
-  var Uber = Backbone.Model.extend({
-
-  })
-
-
-
   var MicView = Backbone.View.extend({
     witAiClientKey: 'SEQIOU2HL5YXX3DIPEPTAAPRDU6NM6V5',
     el: $('.body'),
@@ -13,7 +7,6 @@ $(function (){
     uberTemplate: $('#uber-template').html(),
     shotsFiredTemplate: $('#shots-fired-template').html(),
     searchTemplate: $('#search-template').html(),
-    callbackServices: Robot,
     createMic: function (){
       var self = this;
       this.mic = new Wit.Microphone(document.getElementById("microphone"));

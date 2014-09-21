@@ -98,7 +98,7 @@ def on_record():
             url='https://api.wit.ai/speech?v=20140920',
             data=waveform_request.content,
             headers={
-                'Authorization': 'Bearer 5QX3F2PX2RTQI2DVWRLYV7VXVARO767B',
+                'Authorization': 'Bearer 74P6WYD67TXIPGTS5SSA6W3VUKFHT6OM',
                 'Content-Type': 'audio/wav'
             }
     )
