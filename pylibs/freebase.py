@@ -8,6 +8,9 @@ def person_search(entities, client):
     entity_dict = (entities.get('wikipedia_search_query') or
             entities.get('entity'))
 
+    if len(entity_dict) == 0:
+        return 'I\'m not entirely sure of what you said.'
+
     if (not isinstance(entity_dict, dict)):
         entity_dict = entity_dict[0]
 
