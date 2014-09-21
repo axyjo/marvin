@@ -22,15 +22,11 @@ app = Flask(__name__, static_folder='static', static_url_path='')
 me.connect('jarvis')
 callers = {}
 
-affirmative = [
-    "Roger that.",
-    "Gotcha. Gonna get on that."
-]
-
 negative = [
     "I couldn't quite catch that.",
     "Say what?",
-    "Could you repeat that?"
+    "Could you repeat that?",
+    "I'm sorry, I didn't understand that."
 ]
 
 callbacks = {
@@ -114,11 +110,10 @@ def on_record():
     intent = wit_dict.get('outcomes')[0].get('intent')
     entities = wit_dict.get('outcomes')[0].get('entities')
 
-    resp.say(random.choice(affirmative))
-    resp.pause()
-
     if intent in callbacks:
         resp.say(callbacks[intent](entities, 'voice'))
+    else:
+        resp.say(random.choice(negative))
 
     resp.record(
             action='/callback/twilio/onRecord',
