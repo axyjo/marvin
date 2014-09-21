@@ -4,7 +4,8 @@ import urllib
 
 def person_search(entities, client):
     name_search_url = 'https://www.googleapis.com/freebase/v1/search?query='
-    entity_dict = entities.get('entity')
+    print entities
+    entity_dict = entities.get('wikipedia_search_query')
     if (not isinstance(entity_dict, dict)):
         entity_dict = entity_dict[0]
 
