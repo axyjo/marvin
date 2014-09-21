@@ -107,13 +107,16 @@ def on_record():
     wit_dict = json.loads(wit_response.text)
     print wit_dict
 
-    intent = wit_dict.get('outcomes')[0].get('intent')
-    entities = wit_dict.get('outcomes')[0].get('entities')
-
-    if intent in callbacks:
-        resp.say(callbacks[intent](entities, 'voice'))
-    else:
+    if len(wit_dict.get('outcomes')) == 0:
         resp.say(random.choice(negative))
+    else:
+        intent = wit_dict.get('outcomes')[0].get('intent')
+        entities = wit_dict.get('outcomes')[0].get('entities')
+
+        if intent in callbacks:
+            resp.say(callbacks[intent](entities, 'voice'))
+        else:
+            resp.say(random.choice(negative))
 
     resp.record(
             action='/callback/twilio/onRecord',
