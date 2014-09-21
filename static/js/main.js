@@ -74,7 +74,6 @@ $(function (){
     },
     showPewPew: function (){
       var compiled = Handlebars.compile(this.shotsFiredTemplate);
-      this.$el.css('width', '700px');
       this.$el.append(compiled());
     },
     getUberRide: function (entities, response){
@@ -95,7 +94,6 @@ $(function (){
     searchPerson: function (entities, response){
       var compiled = Handlebars.compile(this.searchTemplate);
       this.$el.hide();
-      this.$el.css('width', '700px');
       this.$el.append(compiled({text: response.response}));
       
       this.$el.slideDown();
@@ -103,7 +101,6 @@ $(function (){
     defaultIntent: function (response){
       var compiled = Handlebars.compile(this.searchTemplate);
       this.$el.hide();
-      this.$el.css('width', '700px');
       this.$el.append(compiled({text: response.response}));
       
       this.$el.slideDown();
@@ -121,7 +118,6 @@ $(function (){
     renderUber: function (collection){
       var compiled = Handlebars.compile(this.uberTemplate);
       this.$el.hide();
-      this.$el.css('width', '400px');
       this.$el.append(compiled({collection: collection}));
       
       this.$el.slideDown();

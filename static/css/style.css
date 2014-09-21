@@ -14,9 +14,21 @@ ul .badge {
   .body .panel-body {
     line-height: 25px;
     padding: 20px; }
+  .body .list-group {
+    width: 400px;
+    margin: 20px auto; }
+  .body .panel {
+    width: 700px;
+    margin: 20px auto; }
 
 .error {
   width: 700px;
   display: none; }
+
+.width700 {
+  width: 700px; }
+
+#microphone {
+  margin-bottom: 20px; }
 
 /*# sourceMappingURL=style.css.map */
