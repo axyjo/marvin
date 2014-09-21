@@ -1,0 +1,25 @@
+ul .badge{
+  background-color: #469DD8;
+}
+
+.body{
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+  ul li{
+    text-align: left;
+    padding-left: 30px;
+  }
+  .alert{
+    margin: 20px auto;
+  }
+  .panel-body {
+    line-height: 25px;
+    padding:20px;
+  }
+}
+
+.error{
+  width: 700px;
+}
