@@ -11,6 +11,7 @@ from uber import uber_get_ride
 from freebase import person_search
 from zen import zen
 from wolfram import wolfram_math
+#import calendar
 
 app = Flask(__name__, static_folder='static', static_url_path='')
 
@@ -98,7 +99,7 @@ def on_record():
             url='https://api.wit.ai/speech?v=20140920',
             data=waveform_request.content,
             headers={
-                'Authorization': 'Bearer 74P6WYD67TXIPGTS5SSA6W3VUKFHT6OM',
+                'Authorization': 'Bearer PRHP2YAIXJJVQZRJNV2CSSKUM2NI5SWJ',
                 'Content-Type': 'audio/wav'
             }
     )
@@ -129,7 +130,7 @@ def on_text():
     wit_response = requests.get(
             url='https://api.wit.ai/message?v=20140920&q=' + request.values.get('Body', None),
             headers={
-                'Authorization': 'Bearer 5QX3F2PX2RTQI2DVWRLYV7VXVARO767B'
+                'Authorization': 'Bearer PRHP2YAIXJJVQZRJNV2CSSKUM2NI5SWJ'
             }
     )
 

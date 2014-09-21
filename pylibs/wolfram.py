@@ -6,7 +6,8 @@ from bs4 import BeautifulSoup
 def wolfram_math(entities, client):
     print "entities"
     print entities
-    expression = entities.get('math_expression')
+    expression = (entities.get('wolfram_search_query') or
+            entities.get('entity'))
     if (not isinstance(expression, dict)):
         expression = expression[0]
     expression = expression.get('value')
