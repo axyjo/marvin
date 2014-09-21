@@ -1,7 +1,7 @@
 $(function (){
 
   var MicView = Backbone.View.extend({
-    witAiClientKey: 'SEQIOU2HL5YXX3DIPEPTAAPRDU6NM6V5',
+    witAiClientKey: 'A2HSS3QKX6BNH7F2SZ25J2O7MG4XHZPE',
     el: $('.body'),
     template: $("#mic-template").html(),
     uberTemplate: $('#uber-template').html(),
@@ -97,7 +97,7 @@ $(function (){
       this.$el.hide();
       this.$el.css('width', '700px');
       this.$el.append(compiled({text: response.response}));
-      
+
       this.$el.slideDown();
     },
     defaultIntent: function (response){
@@ -105,7 +105,7 @@ $(function (){
       this.$el.hide();
       this.$el.css('width', '700px');
       this.$el.append(compiled({text: response.response}));
-      
+
       this.$el.slideDown();
     },
     getInfoDiv: function (msg) {
@@ -123,7 +123,7 @@ $(function (){
       this.$el.hide();
       this.$el.css('width', '400px');
       this.$el.append(compiled({collection: collection}));
-      
+
       this.$el.slideDown();
     }
   });
