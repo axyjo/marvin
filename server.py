@@ -10,6 +10,7 @@ import twilio.twiml
 from uber import uber_get_ride
 from freebase import person_search
 from zen import zen
+from wolfram import wolfram_math
 
 app = Flask(__name__, static_folder='static', static_url_path='')
 
@@ -31,7 +32,8 @@ callbacks = {
     'uber_get_ride': uber_get_ride,
     'shots_fired': lambda x, y : 'Pew pew',
     'person_search': person_search,
-    'zen': zen
+    'zen': zen,
+    'math': wolfram_math
 }
 
 @app.route("/")
