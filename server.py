@@ -99,7 +99,7 @@ def on_record():
             url='https://api.wit.ai/speech?v=20140920',
             data=waveform_request.content,
             headers={
-                'Authorization': 'Bearer PRHP2YAIXJJVQZRJNV2CSSKUM2NI5SWJ',
+                'Authorization': 'Bearer QPTL7PIWMDY6MGDKXCMJPRQM7WWSBV2Q',
                 'Content-Type': 'audio/wav'
             }
     )
@@ -132,7 +132,7 @@ def on_text():
     wit_response = requests.get(
             url='https://api.wit.ai/message?v=20140920&q=' + request.values.get('Body', None),
             headers={
-                'Authorization': 'Bearer PRHP2YAIXJJVQZRJNV2CSSKUM2NI5SWJ'
+                'Authorization': 'Bearer QPTL7PIWMDY6MGDKXCMJPRQM7WWSBV2Q'
             }
     )
 
