@@ -1,3 +1,7 @@
+from gevent import monkey
+monkey.patch_all()
+import gevent.wsgi
+import werkzeug.serving
 from flask import Flask
 from flask import request
 from flask import jsonify
@@ -18,15 +22,11 @@ app = Flask(__name__, static_folder='static', static_url_path='')
 me.connect('jarvis')
 callers = {}
 
-affirmative = [
-    "Roger that.",
-    "Gotcha. Gonna get on that."
-]
-
 negative = [
     "I couldn't quite catch that.",
     "Say what?",
-    "Could you repeat that?"
+    "Could you repeat that?",
+    "I'm sorry, I didn't understand that."
 ]
 
 callbacks = {
@@ -110,11 +110,10 @@ def on_record():
     intent = wit_dict.get('outcomes')[0].get('intent')
     entities = wit_dict.get('outcomes')[0].get('entities')
 
-    resp.say(random.choice(affirmative))
-    resp.pause()
-
     if intent in callbacks:
         resp.say(callbacks[intent](entities, 'voice'))
+    else:
+        resp.say(random.choice(negative))
 
     resp.record(
             action='/callback/twilio/onRecord',
@@ -150,4 +149,7 @@ def on_text():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.debug = True
+
+    ws = gevent.wsgi.WSGIServer(('0.0.0.0', 5000), app)
+    ws.serve_forever()
