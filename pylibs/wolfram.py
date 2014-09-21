@@ -16,6 +16,7 @@ def wolfram_math(entities, client):
     return_format = '&format=plaintext'
     answer = requests.get(wolfram_url + urllib.quote(expression) + return_format)
     soup = BeautifulSoup(answer.text)
+    print soup
     try:
         answer = soup.queryresult.find_all('pod', title='Result')[0].find(
                 'plaintext').getText()
@@ -24,5 +25,9 @@ def wolfram_math(entities, client):
             answer = soup.queryresult.find_all('pod', title='Exact result')[0].find(
                 'plaintext').getText()
         except:
-            return "Sorry, I didn't catch that"
+            try:
+                answer = soup.queryresult.find_all('pod')[1].find(
+                        'plaintext').getText()
+            except:
+                return "Sorry, I didn't catch that"
     return answer
