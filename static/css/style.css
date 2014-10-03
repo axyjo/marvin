@@ -16,8 +16,8 @@ ul .badge {
     width: 400px;
     margin: 20px auto; }
   .body .panel {
-    width: 698px;
-    margin: 20px auto; }
+    width: 678px;
+    margin: 10px auto; }
 
 .error {
   width: 700px;
@@ -37,5 +37,3 @@ ul .badge {
 body .container {
   width: 700px;
   padding: 0; }
-
-/*# sourceMappingURL=style.css.map */
