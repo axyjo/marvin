@@ -2,12 +2,12 @@ $(function (){
 
   var MicView = Backbone.View.extend({
     witAiClientKey: 'A2HSS3QKX6BNH7F2SZ25J2O7MG4XHZPE',
-    el: $('.body'),
     template: $("#mic-template").html(),
     uberTemplate: $('#uber-template').html(),
     shotsFiredTemplate: $('#shots-fired-template').html(),
     searchTemplate: $('#search-template').html(),
-    createMic: function (){
+
+    createMic: function () {
       var self = this;
       this.mic = new Wit.Microphone(document.getElementById("microphone"));
 
@@ -41,7 +41,8 @@ $(function (){
       };
       this.mic.connect(this.witAiClientKey);
     },
-    determineIntent: function (intent, entities, response){
+
+    determineIntent: function (intent, entities, response) {
       var self = this;
       if(intent === 'shots_fired'){
         this.showPewPew();
@@ -70,15 +71,18 @@ $(function (){
         });
       }
     },
-    badConfidence: function (){
+
+    badConfidence: function () {
       this.$el.find('.error').slideDown();
       this.$el.find('.error').text("Sorry, we couldn't make out what you said. Can you try again?");
     },
+
     showPewPew: function (){
       var compiled = Handlebars.compile(this.shotsFiredTemplate);
       this.$el.append(compiled());
     },
-    getUberRide: function (entities, response){
+
+    getUberRide: function (entities, response) {
       var times = response.response.split(', ');
       if (entities.uber_types && false) {
         times = _.filter(times, {});
@@ -93,31 +97,37 @@ $(function (){
       });
       this.renderUber(collection);
     },
-    searchPerson: function (entities, response){
+
+    searchPerson: function (entities, response) {
       var compiled = Handlebars.compile(this.searchTemplate);
       this.$el.hide();
       this.$el.append(compiled({text: response.response}));
 
       this.$el.slideDown();
     },
-    defaultIntent: function (response){
+
+    defaultIntent: function (response) {
       var compiled = Handlebars.compile(this.searchTemplate);
       this.$el.hide();
       this.$el.append(compiled({text: response.response}));
 
       this.$el.slideDown();
     },
+
     getInfoDiv: function (msg) {
       document.getElementById("info").innerHTML = msg;
     },
+
     formatMins: function(seconds) {
       return Math.ceil(seconds / 60);
     },
-    render: function (){
+
+    render: function () {
       this.createMic();
       return this;
     },
-    renderUber: function (collection){
+
+    renderUber: function (collection) {
       var compiled = Handlebars.compile(this.uberTemplate);
       this.$el.hide();
       this.$el.append(compiled({collection: collection}));
@@ -126,9 +136,8 @@ $(function (){
     }
   });
 
-
-  var app = new MicView();
-  app.render();
+  var micView = new MicView({el: $(".body")});
+  micView.render();
   Backbone.history.start();
 
 });
